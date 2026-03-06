@@ -98,7 +98,7 @@ function eval_task2(;
 )
 
     group = "/test"
-    G = read_gold(goldfile; k, group, starts=0)
+    G = read_gold(goldfile; k, group)
     distquantiles(md"gold standard: $goldfile", G.dists, klist=[1, 10, 20, 30])
 
     # Some statistics about the gold standard 
