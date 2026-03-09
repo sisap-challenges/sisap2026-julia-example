@@ -42,20 +42,21 @@ function remove_self_loop!(knns, dists)
 end
 
 function eval_task1(;
+    task="task1",
+    group = "/allknn",
     goldfile="data/benchmark-dev-wikipedia-bge-m3-small.h5",
-    reslist=glob("results/task1*/*/*.h5"),
-    outfile="results-task1.csv",
+    reslist=glob("results/$task-*/*/*.h5"),
+    outfile="results-$task.csv",
+    klist=[1, 5, 10, 15],
     k=15
-)
-
-    group = "/allknn"
+)    
     G = read_gold(goldfile; k=k + 1, group)
     remove_self_loop!(G.knns, G.dists)
-    distquantiles(md"gold standard: $goldfile", G.dists, klist=[1, 5, 10, 15])
+    distquantiles(md"gold standard: $goldfile", G.dists; klist)
 
     # Some statistics about the gold standard 
 
-    display(md"## Result analysis of your _task1_ results")
+    display(md"## Result analysis of your _$(task)_ results")
     D = []
 
     for resfile in reslist
@@ -72,11 +73,10 @@ function eval_task1(;
             remove_self_loop!(knns, dists)
             recall = macrorecall((@view G.knns[1:k, :]), (@view knns[1:k, :]))
 
-            distquantiles(md"", dists, klist=[1, 5, 10, 15])
+            distquantiles(md"", dists; klist)
             buildtime = A["buildtime"]
             optimtime = A["optimtime"]
             querytime = A["querytime"]
-            task = "allknn" # A["task"]
             dataset = goldfile #A["db"]
             totaltime = get(A, "totaltime", buildtime + optimtime + querytime)
             R = (; algo=A["algo"], recall, totaltime, buildtime, optimtime, querytime, size=A["size"], resfile, dataset, task)
@@ -90,20 +90,21 @@ function eval_task1(;
     CSV.write(outfile, D)
 end
 
-function eval_task2(;
-    goldfile="data/llama-dev.h5",
-    reslist=glob("results/task2*/*.h5"),
-    outfile="results-task2.csv",
+function eval_task23(;
+    task,
+    goldfile,
+    reslist=glob("results/$task-*/*.h5"),
+    outfile="results-$task.csv",
+    klist=[1, 10, 20, 30],
+    group = "/test",
     k=30
 )
-
-    group = "/test"
     G = read_gold(goldfile; k, group)
-    distquantiles(md"gold standard: $goldfile", G.dists, klist=[1, 10, 20, 30])
+    distquantiles(md"gold standard: $goldfile", G.dists; klist)
 
     # Some statistics about the gold standard 
 
-    display(md"## Result analysis ")
+    display(md"## Result analysis")
     D = []
 
     for resfile in reslist
@@ -117,16 +118,15 @@ function eval_task2(;
             #A = attrs(f)
             A = JLD2.load_attributes(f, "")
             knns, dists = f["knns"][1:k, :], f["dists"][1:k, :]
-            @show G.knns[1:k, 1:8]
-            @show knns[1:k, 1:8]
+            #@show G.knns[1:k, 1:8]
+            #@show knns[1:k, 1:8]
 
             recall = macrorecall((@view G.knns[1:k, :]), (@view knns[1:k, :]))
 
-            distquantiles(md"", dists, klist=[1, 10, 20, 30])
+            distquantiles(md"", dists; klist)
             buildtime = A["buildtime"]
             optimtime = A["optimtime"]
             querytime = A["querytime"]
-            task = "task2" # A["task"]
             dataset = goldfile #A["db"]
             totaltime = get(A, "totaltime", buildtime + optimtime + querytime)
             R = (; algo=A["algo"], recall, totaltime, buildtime, optimtime, querytime, size=A["size"], resfile, dataset, task)
@@ -140,3 +140,5 @@ function eval_task2(;
     CSV.write(outfile, D)
 end
 
+eval_task2() = eval_task23(task="task2", goldfile="data/llama-dev.h5")
+eval_task3() = eval_task23(task="task3", goldfile="data/fiqa-dev.h5", group="otest")
