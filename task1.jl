@@ -48,10 +48,6 @@ function main_task1(;
             ScalarQuant.SQu8SqL2(), ScalarQuant.SQu8(X), "PCA256-SQu8-SqL2"
         end=#
         #ScalarQuant.SQu8NormCosine(), ScalarQuant.SQu8(X), "SQu8Cos"
-        #=let rp = Projections.qr(1024, 256)
-            X = Projections.transform(rp, X)
-            ScalarQuant.SQu8SqL2(), ScalarQuant.SQu8(X), "RP256-SQu8-SqL2"
-        end=#
     end
 
     outdir = "results/task1-$name"
