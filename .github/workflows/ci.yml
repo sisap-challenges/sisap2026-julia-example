@@ -67,9 +67,10 @@ jobs:
           ls -l 
           ls -l data
           JULIA_PROJECT=. JULIA_NUM_THREADS=auto julia -e 'using Pkg; Pkg.instantiate()'
-          JULIA_PROJECT=. JULIA_NUM_THREADS=auto julia -L sisap2026.jl -e 'main_task1(); main_task2()'
+          JULIA_PROJECT=. JULIA_NUM_THREADS=auto julia -L sisap2026.jl -e 'main_task1(); main_task2(); main_task3()'
           JULIA_PROJECT=. julia -L eval.jl -e 'eval_task1()' | tee report-eval-task1.txt
           JULIA_PROJECT=. julia -L eval.jl -e 'eval_task2()' | tee report-eval-task2.txt
+          JULIA_PROJECT=. julia -L eval.jl -e 'eval_task3()' | tee report-eval-task3.txt
       - uses: actions/upload-artifact@v4
         with:
           name: report
