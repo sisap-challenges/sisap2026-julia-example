@@ -1,5 +1,5 @@
 using LinearAlgebra, HDF5, JLD2, Glob, JSON, ProgressMeter, Random, Printf, Dates, StatsBase, Statistics, MultivariateStats, Accessors
-using SimilaritySearch, SimilaritySearch.Dist, SimilaritySearch.ScalarQuant, SimilaritySearch.Projections
+using SimilaritySearch, SimilaritySearch.Dist, SimilaritySearch.ScalarQuant
 
 function save_results(knns_::Matrix, meta, resfile::AbstractString)
     knns = convert(Matrix{Int32}, knns_)
