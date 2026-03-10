@@ -50,7 +50,7 @@ function main_task1(;
         #ScalarQuant.SQu8NormCosine(), ScalarQuant.SQu8(X), "SQu8Cos"
     end
 
-    outdir = "results/task1-$name"
+    outdir = "results/task1"
     resfile_ = replace(basename(file), ".h5" => "")
     #indexfile = joinpath(outdir, "index-$(name).jl2")
     benchmark = (; file, k)

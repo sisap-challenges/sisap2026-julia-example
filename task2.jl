@@ -94,7 +94,7 @@ function main_task2(;
         Dist.CastF32.NormCosine(), StrideMatrixDatabase(Float16.(X)), StrideMatrixDatabase(Float16.(Q)), "f16-Cos"
     end
 
-    outdir = "results/task2-$name"
+    outdir = "results/task2"
     benchmark = (; file, k)
     run_task2_exhaustive(dist, db, queries; benchmark, name, outdir)
     #run_task2(dist, db, queries; benchmark, name="$name $file", outdir)

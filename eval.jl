@@ -45,7 +45,7 @@ function eval_task1(;
     task="task1",
     group = "/allknn",
     goldfile="data/benchmark-dev-wikipedia-bge-m3-small.h5",
-    reslist=glob("results/$task-*/*/*.h5"),
+    reslist=glob("results/$task*/*/*.h5"),
     outfile="results-$task.csv",
     klist=[1, 5, 10, 15],
     k=15
@@ -93,7 +93,7 @@ end
 function eval_task23(;
     task,
     goldfile,
-    reslist=glob("results/$task-*/*.h5"),
+    reslist=glob("results/$task*/*.h5"),
     outfile="results-$task.csv",
     klist=[1, 10, 20, 30],
     group = "/test",

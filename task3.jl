@@ -63,7 +63,7 @@ function main_task3(filename="data/fiqa-dev.h5"; k::Int=30,logbase=1.1f0, minrec
         meta["searchparams"] = string(S.algo[])
         meta["totaltime"] = buildtime + querytime 
         @info meta
-        outdir = "results/task3-$algo"
+        outdir = "results/task3"
         resfile = joinpath(outdir, algo * " " * meta["params"] * " " * meta["searchparams"] * ".h5")
         save_results(knns, meta, resfile)
     end
