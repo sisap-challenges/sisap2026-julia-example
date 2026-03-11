@@ -1,4 +1,4 @@
-using LinearAlgebra, HDF5, JLD2, Glob, JSON, ProgressMeter, Random, Printf, Dates, StatsBase, Statistics, MultivariateStats, Accessors
+using LinearAlgebra, HDF5, JLD2, Glob, Random, Printf, Dates, StatsBase, Statistics, MultivariateStats, Accessors
 using SimilaritySearch, SimilaritySearch.Dist, SimilaritySearch.ScalarQuant
 
 function save_results(knns_::Matrix, meta, resfile::AbstractString)

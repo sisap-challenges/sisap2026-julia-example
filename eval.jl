@@ -1,4 +1,4 @@
-using JLD2, SimilaritySearch, DataFrames, CSV, Glob, UnicodePlots, Printf, Statistics, StatsBase, Markdown
+using JLD2, SimilaritySearch, DataFrames, CSV, Glob, Printf, Statistics, StatsBase, Markdown
 
 function read_gold(filename; group, k=30, starts=1)
     G = jldopen(filename) do f
