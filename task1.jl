@@ -37,9 +37,12 @@ end
 function main_task1(;
     file="data/benchmark-dev-wikipedia-bge-m3-small.h5",
     k::Int=15 + 1,
+    output_file=nothing,
+    dataset="",
+    task="task1",
 )
-    dist, X, name = jldopen(file) do f
-        @time "Loading $file/train" X = f["train"]
+    dist, X, name = h5open(file, "r") do f
+        @time "Loading $file/train" X = read(f["train"])
         Dist.CastF32.NormCosine(), StrideMatrixDatabase(X), "f16-cos"
         #ScalarQuant.SQu8SqL2(), ScalarQuant.SQu8(X), "SQu8SqL2"
         #ScalarQuant.SQu8SqL2(), ScalarQuant.SQu2(X), "SQu2SqL2"
@@ -56,7 +59,9 @@ function main_task1(;
     benchmark = (; file, k)
     totaltime = @elapsed knns, meta = run_task1(dist, X; benchmark, name="$name $file")
     meta["totaltime"] = totaltime
+    meta["dataset"] = dataset
+    meta["task"] = task
     @info meta
-    resfile = joinpath(outdir, resfile_, "ABS " * meta["params"] * ".h5")
+    resfile = output_file !== nothing ? output_file : joinpath(outdir, resfile_, "ABS " * meta["params"] * ".h5")
     save_results(knns, meta, resfile)
 end

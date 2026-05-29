@@ -25,7 +25,7 @@ function load_sparse_matrix(filename, group_path)
     end
 end
 
-function main_task3(filename="data/fiqa-dev.h5"; k::Int=30,logbase=1.1f0, minrecall=0.99f0)
+function main_task3(filename="data/fiqa-dev.h5"; k::Int=30, logbase=1.1f0, minrecall=0.99f0, output_file=nothing, dataset="", task="task3")
     mkpath("data")
 
     db = load_sparse_matrix(filename, "train")
@@ -61,10 +61,11 @@ function main_task3(filename="data/fiqa-dev.h5"; k::Int=30,logbase=1.1f0, minrec
         querytime = @elapsed knns = searchbatch(S, ctx, queries, k)
         meta["querytime"] = querytime
         meta["searchparams"] = string(S.algo[])
-        meta["totaltime"] = buildtime + querytime 
+        meta["totaltime"] = buildtime + querytime
+        meta["dataset"] = dataset
+        meta["task"] = task
         @info meta
-        outdir = "results/task3"
-        resfile = joinpath(outdir, algo * " " * meta["params"] * " " * meta["searchparams"] * ".h5")
+        resfile = output_file !== nothing ? output_file : joinpath(outdir, algo * " " * meta["params"] * " " * meta["searchparams"] * ".h5")
         save_results(knns, meta, resfile)
     end
 end

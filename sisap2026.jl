@@ -3,7 +3,7 @@ using SimilaritySearch, SimilaritySearch.Dist, SimilaritySearch.ScalarQuant
 
 function save_results(knns_::Matrix, meta, resfile::AbstractString)
     knns = convert(Matrix{Int32}, knns_)
-    dists = convert(Matrix{Float32}, knns_)
+    dists = zeros(Float32, size(knns_))
 
     mkpath(dirname(resfile))
     h5open(resfile, "w") do f
@@ -11,12 +11,13 @@ function save_results(knns_::Matrix, meta, resfile::AbstractString)
         f["dists"] = dists
         A = attributes(f)
         A["algo"] = meta["algo"]
-
+        A["dataset"] = get(meta, "dataset", "")
+        A["task"] = get(meta, "task", "")
         A["buildtime"] = meta["buildtime"]
         A["optimtime"] = get(meta, "optimtime", 0.0)
         A["querytime"] = meta["querytime"]
         A["params"] = meta["params"]
-        A["searchparams"] = meta["searchparams"]
+        A["searchparams"] = get(meta, "searchparams", "")
         A["size"] = meta["size"]
     end
 end

@@ -1,10 +1,13 @@
 function main_task2(;
     file="data/llama-dev.h5",
     k::Int=30,
+    output_file=nothing,
+    dataset="",
+    task="task2",
 )
-    dist, db, queries, name = jldopen(file) do f
-        @time "Loading $file/train" X = f["train"]
-        @time "Loading $file/queries" Q = f["test/queries"]
+    dist, db, queries, name = h5open(file, "r") do f
+        @time "Loading $file/train" X = read(f["train"])
+        @time "Loading $file/queries" Q = read(f["test/queries"])
         @info "X:" quantile(X[1:1000], 0:0.1:1)
         @info "Q:" quantile(Q[1:1000], 0:0.1:1)
         @show size(X) size(Q) typeof(X)
@@ -42,8 +45,10 @@ function main_task2(;
     meta["querytime"] = querytime
     meta["searchparams"] = ""
     meta["totaltime"] = buildtime + querytime + optimtime
+    meta["dataset"] = dataset
+    meta["task"] = task
     @info meta
-    resfile = joinpath(outdir, meta["algo"] * " " * meta["params"] * ".h5")
+    resfile = output_file !== nothing ? output_file : joinpath(outdir, meta["algo"] * " " * meta["params"] * ".h5")
     save_results(knns, meta, resfile)
 
 end
