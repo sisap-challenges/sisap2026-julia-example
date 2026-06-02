@@ -42,7 +42,9 @@ function main_task1(;
     task="task1",
 )
     dist, X, name = h5open(file, "r") do f
-        @time "Loading $file/train" X = read(f["train"])
+        @time "Loading $file/train" X = let ds = f["train"]
+            sizeof(HDF5.datatype(ds)) == 2 ? read(ds, Float16) : read(ds)
+        end
         Dist.CastF32.NormCosine(), StrideMatrixDatabase(X), "f16-cos"
         #ScalarQuant.SQu8SqL2(), ScalarQuant.SQu8(X), "SQu8SqL2"
         #ScalarQuant.SQu8SqL2(), ScalarQuant.SQu2(X), "SQu2SqL2"
